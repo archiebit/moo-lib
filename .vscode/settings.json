@@ -1,0 +1,14 @@
+{
+    "files.associations":
+    {
+        "*.hh":     "cpp",
+        "*.cc":     "cpp",
+        "*.in":     "cpp",
+        "*.tp":     "cpp",
+        "makefile": "makefile"
+    },
+    "files.exclude":
+    {
+        "**/.gitkeep": true
+    }
+}

@@ -1,0 +1,12 @@
+### VS code stuff ###
+
+.vscode/**/*
+
+!.vscode/settings.json
+!.vscode/c_cpp_properties.json
+
+
+### Project stuff ###
+out/**/*
+
+!out/.gitkeep

@@ -16,4 +16,4 @@ Since I use Windows, the implementation details will be written in WinAPI.
 And I chose Clang compiler for this project.
 
 >[!NOTE]
->English is not my native language, so don't be angry 🍼🦆
+>English is not my native language, so don't be angry. 🐈

@@ -64,6 +64,7 @@ namespace moo::ini::exception
         context_node * next;
         context        data;
         uint32         code;
+        uint32         done;
     };
 }
 
@@ -87,6 +88,7 @@ namespace moo::ini::exception
     {
         void * moo_create_exception_node( )
         {
+            // Check for a free exception record in free-list.
             if( context_free_size != 0 )
             {
                 auto node = context_free;
@@ -94,6 +96,7 @@ namespace moo::ini::exception
 
                 node->next = context_used;
                 node->code = 0;
+                node->done = 0;
 
                 context_free       = next;
                 context_used       = node;
@@ -107,6 +110,8 @@ namespace moo::ini::exception
             SIZE_T Size = sizeof( context_node );
             LPVOID Spot = HeapAlloc( GetProcessHeap( ), 0, Size );
 
+            // Bruh moment?
+            // If allocation fails, then everything breaks.
             if( Spot == NULL )
             {
                 WCHAR Message[] = L"Can\'t allocate exception record.\n";
@@ -123,6 +128,7 @@ namespace moo::ini::exception
 
             node->next = context_used;
             node->code = 0;
+            node->done = 0;
 
             context_used       = node;
             context_used_size += 1;
@@ -141,6 +147,8 @@ namespace moo::ini::exception
             auto node = context_used;
             auto next = context_used->next;
 
+            // Put exception record to the free-list, if its size
+            // in the limit.
             if( context_free_size < context_free_limit )
             {
                 node->next = context_free;
@@ -153,6 +161,7 @@ namespace moo::ini::exception
             }
             else
             {
+                // Otherwise free it.
                 HeapFree( GetProcessHeap( ), 0, node );
 
                 context_used = next;
@@ -160,6 +169,53 @@ namespace moo::ini::exception
             }
         }
 
+    #if defined __x86_64__
+        [[gnu::naked, noreturn]]
+        void   moo_create_exception_jump( context * record )
+        {
+            asm
+            (
+                // Load saved register values.
+                "mov      rax,  [rcx +   0]     \n"
+                "mov      rbx,  [rcx +   8]     \n"
+                "mov      rdx,  [rcx +  24]     \n"
+                "mov      rsi,  [rcx +  32]     \n"
+                "mov      rdi,  [rcx +  40]     \n"
+                "mov      rsp,  [rcx +  48]     \n"
+                "mov      rbp,  [rcx +  56]     \n"
+                "mov       r8,  [rcx +  64]     \n"
+                "mov       r9,  [rcx +  72]     \n"
+                "mov      r10,  [rcx +  80]     \n"
+                "mov      r11,  [rcx +  88]     \n"
+                "mov      r12,  [rcx +  96]     \n"
+                "mov      r13,  [rcx + 104]     \n"
+                "mov      r14,  [rcx + 112]     \n"
+                "mov      r15,  [rcx + 120]     \n"
+
+                // The same for XMM.
+                "movdqu  xmm0,  [rcx + 136]     \n"
+                "movdqu  xmm1,  [rcx + 152]     \n"
+                "movdqu  xmm2,  [rcx + 168]     \n"
+                "movdqu  xmm3,  [rcx + 184]     \n"
+                "movdqu  xmm4,  [rcx + 200]     \n"
+                "movdqu  xmm5,  [rcx + 216]     \n"
+                "movdqu  xmm6,  [rcx + 232]     \n"
+                "movdqu  xmm7,  [rcx + 248]     \n"
+                "movdqu  xmm8,  [rcx + 264]     \n"
+                "movdqu  xmm9,  [rcx + 280]     \n"
+                "movdqu xmm10,  [rcx + 296]     \n"
+                "movdqu xmm11,  [rcx + 312]     \n"
+                "movdqu xmm12,  [rcx + 328]     \n"
+                "movdqu xmm13,  [rcx + 344]     \n"
+                "movdqu xmm14,  [rcx + 360]     \n"
+                "movdqu xmm15,  [rcx + 376]     \n"
+
+                // Jump to the return address.
+                "mov      rcx,  [rcx + 128]     \n"
+                "jmp      rcx                   \n"
+            );
+        }
+    #endif
 
 
     #if defined __x86_64__
@@ -242,6 +298,95 @@ namespace moo::ini::exception
             );
         }
     #endif
+
+        bool moo_check_exception_state( )
+        {
+            // If list is empty just quit.
+            // Maybe rework this state?
+            if( not context_used )
+            {
+                return false;
+            }
+
+            // If there is no exception, or exception is handled,
+            // then exception record will be removed
+            // and program must quit from 'try-catch' block.
+            if( context_used->done == 1 )
+            {
+                moo_remove_exception_node( );
+
+                return false;
+            }
+
+            return true;
+        }
+
+        void moo_leave_exception_scope( )
+        {
+            // If no exception was called, then 'code' is still zero.
+            // So mark it as done.
+            if( context_used->code == 0 )
+            {
+                context_used->done = 1;
+            }
+
+            // If exception code is presented and there is no 'catch' block,
+            // then just jump to previous 'try-catch' block.
+            else if( context_used->done == 0 )
+            {
+                auto code = context_used->code;
+                auto next = context_used->next;
+
+                next->code = code;
+
+                moo_remove_exception_node( );
+                moo_create_exception_jump( & next->data );
+            }
+        }
+
+
+        bool moo_check_exception_code( uint32 code )
+        {
+            // Special case for a 'finally' block.
+            // After completion of 'finally' block,
+            // go to next 'try-catch' block.
+            if( code == 0xFFFF'FFFF )
+            {
+                return true;
+            }
+
+            // General case for exceptions.
+            if( context_used->code == code and code != 0 )
+            {
+                context_used->done = 1;
+
+                return true;
+            }
+
+            // Special case for a 'try' block.
+            if( context_used->code == code )
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        void moo_throw_exception_same( )
+        {
+            // After 'catch' block mark it as not done.
+            // Execution will go to the next 'try-catch' block.
+            context_used->done = 0;
+        }
+
+        void moo_throw_exception_code( uint32 code )
+        {
+            // Set exception data and jump to 'try' block.
+            context_used->code = code;
+            context_used->done = 0;
+
+            moo_create_exception_jump( & context_used->data );
+        }
     }
 #endif
 }

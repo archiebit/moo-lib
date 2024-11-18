@@ -14,8 +14,6 @@ namespace moo::ini::exception
     struct context
     {
     private:
-        using  reg16 = byte[  2 ];
-        using  reg32 = byte[  4 ];
         using  reg64 = byte[  8 ];
         using reg128 = byte[ 16 ];
 
@@ -55,10 +53,6 @@ namespace moo::ini::exception
         reg128 xmm13;
         reg128 xmm14;
         reg128 xmm15;
-
-        reg64 rflags;
-        reg32 xstate;
-        reg16 fflags;
     };
     #else
     #   error Target architecture is not supported!
@@ -165,6 +159,81 @@ namespace moo::ini::exception
                 context_used_size -= 1;
             }
         }
+
+
+
+    #if defined __x86_64__
+        [[gnu::naked]]
+        void moo_enter_exception_scope( )
+        {
+            asm
+            (
+                "push   rbp                     \n"
+                "mov    rbp, rsp                \n"
+                "sub    rsp,  %0                \n"
+
+                "mov    [rsp +   0], rax        \n"
+                "mov    [rsp +   8], rbx        \n"
+                "mov    [rsp +  16], rcx        \n"
+                "mov    [rsp +  24], rdx        \n"
+                "mov    [rsp +  32], rsi        \n"
+                "mov    [rsp +  40], rdi        \n"
+                "mov    [rsp +  48], rsp        \n"
+                "mov    [rsp +  56], rbp        \n"
+                "mov    [rsp +  64],  r8        \n"
+                "mov    [rsp +  72],  r9        \n"
+                "mov    [rsp +  80], r10        \n"
+                "mov    [rsp +  88], r11        \n"
+                "mov    [rsp +  96], r12        \n"
+                "mov    [rsp + 104], r13        \n"
+                "mov    [rsp + 112], r14        \n"
+                "mov    [rsp + 120], r15        \n"
+                "                               \n"
+                "mov    rax, [rbp]              \n"
+                "mov    rcx, [rbp +  8]         \n"
+                "lea    rdx, [rbp + 16]         \n"
+                "mov    [rsp +  56], rax        \n"
+                "mov    [rsp + 128], rcx        \n"
+                "mov    [rsp +  48], rdx        \n"
+
+                "movdqu [rsp + 136],  xmm0      \n"
+                "movdqu [rsp + 152],  xmm1      \n"
+                "movdqu [rsp + 168],  xmm2      \n"
+                "movdqu [rsp + 184],  xmm3      \n"
+                "movdqu [rsp + 200],  xmm4      \n"
+                "movdqu [rsp + 216],  xmm5      \n"
+                "movdqu [rsp + 232],  xmm6      \n"
+                "movdqu [rsp + 248],  xmm7      \n"
+                "movdqu [rsp + 264],  xmm8      \n"
+                "movdqu [rsp + 280],  xmm9      \n"
+                "movdqu [rsp + 296], xmm10      \n"
+                "movdqu [rsp + 312], xmm11      \n"
+                "movdqu [rsp + 328], xmm12      \n"
+                "movdqu [rsp + 344], xmm13      \n"
+                "movdqu [rsp + 360], xmm14      \n"
+                "movdqu [rsp + 376], xmm15      \n"
+
+                "call moo_create_exception_node \n"
+                "add    rax,   8                \n"
+                "mov    rsi, rsp                \n"
+                "mov    rdi, rax                \n"
+                "mov    rcx,  %0                \n"
+                "rep movsb                      \n"
+
+                "mov    rax, [rsp +   0]        \n"
+                "mov    rcx, [rsp +  16]        \n"
+                "mov    rdx, [rsp +  24]        \n"
+                "mov    rsi, [rsp +  32]        \n"
+                "mov    rdi, [rsp +  40]        \n"
+
+                "mov    rsp, rbp                \n"
+                "pop    rbp                     \n"
+                "ret                            \n"
+                :
+                : "i"( sizeof( context ) )
+            );
+        }
+    #endif
     }
 #endif
 }

@@ -109,7 +109,7 @@ namespace moo::ini::exception
 
             if( Spot == NULL )
             {
-                WCHAR Message[] = L"Can\'t allocare exception record.\n";
+                WCHAR Message[] = L"Can\'t allocate exception record.\n";
                 HANDLE Output   = GetStdHandle( STD_ERROR_HANDLE );
                 DWORD Written   = 0;   
                 DWORD    Size   = sizeof( Message ) - sizeof( WCHAR );

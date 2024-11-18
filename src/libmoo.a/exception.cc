@@ -86,4 +86,85 @@ namespace moo::ini::exception
         static thread_local context_node * context_used = nullptr;
         static thread_local context_node * context_free = nullptr;
     }
+
+
+#if defined _WIN32
+    extern "C"
+    {
+        void * moo_create_exception_node( )
+        {
+            if( context_free_size != 0 )
+            {
+                auto node = context_free;
+                auto next = context_free->next;
+
+                node->next = context_used;
+                node->code = 0;
+
+                context_free       = next;
+                context_used       = node;
+                context_free_size -= 1;
+                context_used_size += 1;
+
+                return node;
+            }
+
+
+            SIZE_T Size = sizeof( context_node );
+            LPVOID Spot = HeapAlloc( GetProcessHeap( ), 0, Size );
+
+            if( Spot == NULL )
+            {
+                WCHAR Message[] = L"Can\'t allocare exception record.\n";
+                HANDLE Output   = GetStdHandle( STD_ERROR_HANDLE );
+                DWORD Written   = 0;   
+                DWORD    Size   = sizeof( Message ) - sizeof( WCHAR );
+
+                WriteFile( Output, Message, Size, & Written, NULL );
+                ExitProcess( 1 );
+            }
+
+
+            auto node = static_cast<context_node *>( Spot );
+
+            node->next = context_used;
+            node->code = 0;
+
+            context_used       = node;
+            context_used_size += 1;
+
+            return node;
+        }
+
+        void   moo_remove_exception_node( )
+        {
+            if( context_used_size == 0 )
+            {
+                return;
+            }
+
+
+            auto node = context_used;
+            auto next = context_used->next;
+
+            if( context_free_size < context_free_limit )
+            {
+                node->next = context_free;
+
+                context_free = node;
+                context_used = next;
+
+                context_free_size += 1;
+                context_used_size -= 1;
+            }
+            else
+            {
+                HeapFree( GetProcessHeap( ), 0, node );
+
+                context_used = next;
+                context_used_size -= 1;
+            }
+        }
+    }
+#endif
 }

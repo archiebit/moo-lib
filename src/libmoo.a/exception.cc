@@ -168,10 +168,12 @@ namespace moo::ini::exception
         {
             asm
             (
+                // Function prolog.
                 "push   rbp                     \n"
                 "mov    rbp, rsp                \n"
                 "sub    rsp,  %0                \n"
 
+                // Store general registers.
                 "mov    [rsp +   0], rax        \n"
                 "mov    [rsp +   8], rbx        \n"
                 "mov    [rsp +  16], rcx        \n"
@@ -188,7 +190,8 @@ namespace moo::ini::exception
                 "mov    [rsp + 104], r13        \n"
                 "mov    [rsp + 112], r14        \n"
                 "mov    [rsp + 120], r15        \n"
-                "                               \n"
+
+                // Special case for RBP, RSP and RIP registers.
                 "mov    rax, [rbp]              \n"
                 "mov    rcx, [rbp +  8]         \n"
                 "lea    rdx, [rbp + 16]         \n"
@@ -196,6 +199,7 @@ namespace moo::ini::exception
                 "mov    [rsp + 128], rcx        \n"
                 "mov    [rsp +  48], rdx        \n"
 
+                // Store XMM registers.
                 "movdqu [rsp + 136],  xmm0      \n"
                 "movdqu [rsp + 152],  xmm1      \n"
                 "movdqu [rsp + 168],  xmm2      \n"
@@ -213,6 +217,8 @@ namespace moo::ini::exception
                 "movdqu [rsp + 360], xmm14      \n"
                 "movdqu [rsp + 376], xmm15      \n"
 
+                // Create new exception record and fill it's context
+                // with stored values on stack.
                 "call moo_create_exception_node \n"
                 "add    rax,   8                \n"
                 "mov    rsi, rsp                \n"
@@ -220,12 +226,14 @@ namespace moo::ini::exception
                 "mov    rcx,  %0                \n"
                 "rep movsb                      \n"
 
+                // Get old values. Why not?
                 "mov    rax, [rsp +   0]        \n"
                 "mov    rcx, [rsp +  16]        \n"
                 "mov    rdx, [rsp +  24]        \n"
                 "mov    rsi, [rsp +  32]        \n"
                 "mov    rdi, [rsp +  40]        \n"
 
+                // Function epilogue.
                 "mov    rsp, rbp                \n"
                 "pop    rbp                     \n"
                 "ret                            \n"

@@ -1,8 +1,8 @@
-#ifndef MOO_BYTE_HH
-#define MOO_BYTE_HH
+#ifndef MOONMICE_BYTE_HH
+#define MOONMICE_BYTE_HH
 
 
-namespace moo
+namespace moonmice
 {
     enum class byte : unsigned char
     { };

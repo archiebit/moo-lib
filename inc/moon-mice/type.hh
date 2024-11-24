@@ -1,9 +1,9 @@
-#ifndef MOO_TYPE_HH
-#define MOO_TYPE_HH
+#ifndef MOONMICE_TYPE_HH
+#define MOONMICE_TYPE_HH
 
 
 #if defined _WIN64
-namespace moo
+namespace moonmice
 {
     using uint08 = unsigned char;
     using uint16 = unsigned short int;

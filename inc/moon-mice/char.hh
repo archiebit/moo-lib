@@ -1,8 +1,8 @@
-#ifndef MOO_CHAR_HH
-#define MOO_CHAR_HH
+#ifndef MOONMICE_CHAR_HH
+#define MOONMICE_CHAR_HH
 
 
-namespace moo
+namespace moonmice
 {
 #if defined _WIN32
     using char08 = char;

@@ -25,11 +25,11 @@ include makefile-main
 
 #--- Configuration build list --------------------------------------------------
 ifeq '${config}' 'win-x64-dev'
-$(call create-lib,libmoo.a)
+$(call create-lib,libmoon-mice.a)
 endif
 
 ifeq '${config}' 'win-x64-rel'
-$(call create-lib,libmoo.a)
+$(call create-lib,libmoon-mice.a)
 endif
 
 

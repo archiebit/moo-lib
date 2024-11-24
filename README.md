@@ -1,5 +1,5 @@
 <div>
-  <h1 align="center">Moo - Having fun with C++</h1>
+  <h1 align="center">Moon Mice - Having fun with C++</h1>
   <br>
   <div align="center">
     <a href="https://github.com/archiebit/moo-lib">

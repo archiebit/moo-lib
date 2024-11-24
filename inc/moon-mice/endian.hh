@@ -1,8 +1,8 @@
-#ifndef MOO_ENDIAN_HH
-#define MOO_ENDIAN_HH
+#ifndef MOONMICE_ENDIAN_HH
+#define MOONMICE_ENDIAN_HH
 
 
-namespace moo
+namespace moonmice
 {
     enum class endian
     {

@@ -3,7 +3,7 @@
   <br>
   <div align="center">
     <a href="https://github.com/archiebit/moo-lib">
-      <img src=".github/logo.png" width="128" height="128"/>
+      <img src=".github/logo.png" width="256" height="256"/>
     </a>
   </div>
 </div>

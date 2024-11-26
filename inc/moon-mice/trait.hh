@@ -36,6 +36,9 @@ namespace moonmice
             struct     array;
 
             template <typename in>
+            struct exception;
+
+            template <typename in>
             struct    entire;
         };
 
@@ -46,35 +49,48 @@ namespace moonmice
         template <typename in>
         using  constant = typename  ini::constant<in>::type;
 
+
         /// @brief  Removes 'volatile' qualifier.
         /// @tparam in source type
         template <typename in>
         using  unstable = typename  ini::unstable<in>::type;
+
 
         /// @brief  Removes 'const' and 'volatile' qualifiers.
         /// @tparam in source type
         template <typename in>
         using  defenses = typename  ini::defenses<in>::type;
 
+
         /// @brief  Removes reference definition.
         /// @tparam in source type
         template <typename in>
         using reference = typename ini::reference<in>::type;
+
 
         /// @brief  Removes pointer definition.
         /// @tparam in source type
         template <typename in>
         using     point = typename     ini::point<in>::type;
 
+
         /// @brief  Removes member pointer definition.
         /// @tparam in source type
         template <typename in>
         using    member = typename    ini::member<in>::type;
 
+
         /// @brief  Removes array definition.
         /// @tparam in source type
         template <typename in>
         using     array = typename     ini::array<in>::type;
+
+
+        /// @brief  Removes 'noexcept' specifier.
+        /// @tparam in source type
+        template <typename in>
+        using exception = typename ini::exception<in>::type;
+
 
         /// @brief  Removes all qualifiers and definitions.
         /// @tparam in source type
@@ -293,6 +309,15 @@ namespace moonmice
 
 
     template <typename in>
+    struct remove::ini::exception
+    {
+        using type = in;
+    };
+
+
+
+
+    template <typename in>
     struct remove::ini::entire
     {
         using type = in;
@@ -344,6 +369,741 @@ namespace moonmice
     struct remove::ini::entire<in[ count ]>
     {
         using type = typename entire<in>::type;
+    };
+
+
+
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... )>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile noexcept>
+    {
+        using type = back( args... ) volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile noexcept>
+    {
+        using type = back( args... ) volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile &>
+    {
+        using type = back( args... ) volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile &>
+    {
+        using type = back( args... ) volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile & noexcept>
+    {
+        using type = back( args... ) volatile & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile & noexcept>
+    {
+        using type = back( args... ) volatile & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile &&>
+    {
+        using type = back( args... ) volatile &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile &&>
+    {
+        using type = back( args... ) volatile &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) volatile && noexcept>
+    {
+        using type = back( args... ) volatile && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::constant<back( args... ) const volatile && noexcept>
+    {
+        using type = back( args... ) volatile && noexcept;
+    };
+
+
+
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... )>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const noexcept>
+    {
+        using type = back( args... ) const noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile noexcept>
+    {
+        using type = back( args... ) const noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const &>
+    {
+        using type = back( args... ) const &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile &>
+    {
+        using type = back( args... ) const &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const & noexcept>
+    {
+        using type = back( args... ) const & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile & noexcept>
+    {
+        using type = back( args... ) const & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const &&>
+    {
+        using type = back( args... ) const &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile &&>
+    {
+        using type = back( args... ) const &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const && noexcept>
+    {
+        using type = back( args... ) const && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) volatile && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::unstable<back( args... ) const volatile && noexcept>
+    {
+        using type = back( args... ) const && noexcept;
+    };
+
+
+
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... )>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile & noexcept>
+    {
+        using type = back( args... ) & noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) volatile && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::defenses<back( args... ) const volatile && noexcept>
+    {
+        using type = back( args... ) && noexcept;
+    };
+
+
+
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... )>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile>
+    {
+        using type = back( args... ) const volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const noexcept>
+    {
+        using type = back( args... ) const noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile noexcept>
+    {
+        using type = back( args... ) volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile noexcept>
+    {
+        using type = back( args... ) const volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) &>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const &>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile &>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile &>
+    {
+        using type = back( args... ) const volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) & noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const & noexcept>
+    {
+        using type = back( args... ) const noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile & noexcept>
+    {
+        using type = back( args... ) volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile & noexcept>
+    {
+        using type = back( args... ) const volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) &&>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const &&>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile &&>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile &&>
+    {
+        using type = back( args... ) const volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) && noexcept>
+    {
+        using type = back( args... ) noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const && noexcept>
+    {
+        using type = back( args... ) const noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) volatile && noexcept>
+    {
+        using type = back( args... ) volatile noexcept;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::reference<back( args... ) const volatile && noexcept>
+    {
+        using type = back( args... ) const volatile noexcept;
+    };
+
+
+
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... )>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile>
+    {
+        using type = back( args... ) const volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) noexcept>
+    {
+        using type = back( args... );
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const noexcept>
+    {
+        using type = back( args... ) const;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile noexcept>
+    {
+        using type = back( args... ) volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile noexcept>
+    {
+        using type = back( args... ) const volatile;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) &>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const &>
+    {
+        using type = back( args... ) const &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile &>
+    {
+        using type = back( args... ) volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile &>
+    {
+        using type = back( args... ) const volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) & noexcept>
+    {
+        using type = back( args... ) &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const & noexcept>
+    {
+        using type = back( args... ) const &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile & noexcept>
+    {
+        using type = back( args... ) volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile & noexcept>
+    {
+        using type = back( args... ) const volatile &;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) &&>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const &&>
+    {
+        using type = back( args... ) const &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile &&>
+    {
+        using type = back( args... ) volatile &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile &&>
+    {
+        using type = back( args... ) const volatile &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) && noexcept>
+    {
+        using type = back( args... ) &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const && noexcept>
+    {
+        using type = back( args... ) const &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) volatile && noexcept>
+    {
+        using type = back( args... ) volatile &&;
+    };
+
+    template <typename back, typename... args>
+    struct remove::ini::exception<back( args... ) const volatile && noexcept>
+    {
+        using type = back( args... ) const volatile &&;
     };
 }
 

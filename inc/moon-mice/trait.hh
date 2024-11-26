@@ -4,6 +4,8 @@
 
 namespace moonmice
 {
+    /// @brief This class provide ability to remove type qualifiers
+    ///        and definitions.
     class remove
     {
     private:
@@ -39,27 +41,43 @@ namespace moonmice
 
 
     public:
+        /// @brief  Removes 'const' qualifier.
+        /// @tparam in source type
         template <typename in>
         using  constant = typename  ini::constant<in>::type;
 
+        /// @brief  Removes 'volatile' qualifier.
+        /// @tparam in source type
         template <typename in>
         using  unstable = typename  ini::unstable<in>::type;
 
+        /// @brief  Removes 'const' and 'volatile' qualifiers.
+        /// @tparam in source type
         template <typename in>
         using  defenses = typename  ini::defenses<in>::type;
 
+        /// @brief  Removes reference definition.
+        /// @tparam in source type
         template <typename in>
         using reference = typename ini::reference<in>::type;
 
+        /// @brief  Removes pointer definition.
+        /// @tparam in source type
         template <typename in>
         using     point = typename     ini::point<in>::type;
 
+        /// @brief  Removes member pointer definition.
+        /// @tparam in source type
         template <typename in>
         using    member = typename    ini::member<in>::type;
 
+        /// @brief  Removes array definition.
+        /// @tparam in source type
         template <typename in>
         using     array = typename     ini::array<in>::type;
 
+        /// @brief  Removes all qualifiers and definitions.
+        /// @tparam in source type
         template <typename in>
         using    entire = typename    ini::entire<in>::type;
     };

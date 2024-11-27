@@ -20,13 +20,16 @@ namespace moonmice
     template <typename in>
     inline constexpr auto && forward( remove::reference<in> && value ) noexcept
     {
-        return static_cast<decltype( value ) &&>( value );
+        static_assert( not same<in, remove::reference<in> &>, "You can\'t forward rvalue as lvalue!" );
+
+
+        return static_cast<in &&>( value );
     }
 
     template <typename in>
     inline constexpr auto && forward( remove::reference<in> &  value ) noexcept
     {
-        return static_cast<decltype( value ) &&>( value );
+        return static_cast<in &&>( value );
     }
 
 

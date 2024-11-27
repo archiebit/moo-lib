@@ -1140,6 +1140,9 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is in the list.
+    /// @tparam target the type you want to find
+    /// @tparam list... list of types
     template <typename target, typename... list>
     concept same = ini::same<target, list...>;
 }
@@ -1163,6 +1166,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type has the 'const' qualifier.
+    /// @tparam in target type for testing
     template <typename in>
     concept constant = ini::constant<in>;
 }
@@ -1186,6 +1191,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type has the 'volatile' qualifier.
+    /// @tparam in target type for testing
     template <typename in>
     concept unstable = ini::unstable<in>;
 }
@@ -1221,6 +1228,9 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks whether the target type has
+    ///         the 'const' or 'volatile' qualifiers.
+    /// @tparam in target type for testing
     template <typename in>
     concept defenses = ini::defenses<in>;
 }
@@ -1250,6 +1260,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a reference.
+    /// @tparam in taget type for testing
     template <typename in>
     concept reference = ini::reference<in>;
 }
@@ -1291,6 +1303,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a pointer.
+    /// @tparam in taget type for testing
     template <typename in>
     concept point = ini::point<in>;
 }
@@ -1314,6 +1328,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a member pointer.
+    /// @tparam in taget type for testing
     template <typename in>
     concept member = ini::member<in>;
 }
@@ -1343,6 +1359,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is an array.
+    /// @tparam in taget type for testing
     template <typename in>
     concept series = ini::series<in>;
 }
@@ -1504,6 +1522,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a function.
+    /// @tparam in taget type for testing
     template <typename in>
     concept function = ini::function<in>;
 }
@@ -1665,6 +1685,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a method of some class.
+    /// @tparam in taget type for testing
     template <typename in>
     concept method = ini::method<in>;
 }
@@ -1688,6 +1710,8 @@ namespace moonmice
     }
 
 
+    /// @brief  Checks if the target type is a union, class or struct.
+    /// @tparam in taget type for testing
     template <typename in>
     concept structure = ini::structure<int in::*>;
 }
@@ -1695,6 +1719,8 @@ namespace moonmice
 
 namespace moonmice
 {
+    /// @brief  Checks if the target type is floating point number.
+    /// @tparam in target type for testing
     template <typename in>
     concept  floating = same
     <
@@ -1704,6 +1730,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is character type.
+    /// @tparam in target type for testing
     template <typename in>
     concept  symbolic = same
     <
@@ -1716,6 +1744,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is 'void'.
+    /// @tparam in target type for testing
     template <typename in>
     concept   nothing = same
     <
@@ -1724,6 +1754,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is 'bool'.
+    /// @tparam in target type for testing
     template <typename in>
     concept   logical = same
     <
@@ -1732,6 +1764,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is the type of 'nullptr'.
+    /// @tparam in target type for testing
     template <typename in>
     concept nullpoint = same
     <
@@ -1740,6 +1774,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is a signed integer.
+    /// @tparam in target type for testing
     template <typename in>
     concept sintegral = same
     <
@@ -1752,6 +1788,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is an unsigned integer.
+    /// @tparam in target type for testing
     template <typename in>
     concept uintegral = same
     <
@@ -1764,6 +1802,8 @@ namespace moonmice
     >;
 
 
+    /// @brief  Checks if the target type is an integer.
+    /// @tparam in target type for testing
     template <typename in>
     concept    integral = requires
     {
@@ -1773,6 +1813,8 @@ namespace moonmice
     };
 
 
+    /// @brief  Checks if the target type is an enumeration.
+    /// @tparam in target type for testing
     template <typename in>
     concept enumeration = requires
     {

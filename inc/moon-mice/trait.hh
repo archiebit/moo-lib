@@ -1108,4 +1108,688 @@ namespace moonmice
 }
 
 
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename target, typename... list>
+        inline constexpr auto same
+        {
+            ( same<target, list> or ... )
+        };
+
+        template <typename target, typename other>
+        inline constexpr auto same<target, other>
+        {
+            false
+        };
+
+        template <typename target>
+        inline constexpr auto same<target, target>
+        {
+            true
+        };
+
+        template <typename target>
+        inline constexpr auto same<target>
+        {
+            false
+        };
+    }
+
+
+    template <typename target, typename... list>
+    concept same = ini::same<target, list...>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto constant
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto constant<in const>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept constant = ini::constant<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto unstable
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto unstable<in volatile>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept unstable = ini::unstable<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto defenses
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto defenses<in const>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto defenses<in volatile>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto defenses<in const volatile>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept defenses = ini::defenses<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto reference
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto reference<in &>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto reference<in &&>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept reference = ini::reference<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto point
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto point<in *>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto point<in * const>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto point<in * volatile>
+        {
+            true
+        };
+
+        template <typename in>
+        inline constexpr auto point<in * const volatile>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept point = ini::point<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto member
+        {
+            false
+        };
+
+        template <typename in, typename structure>
+        inline constexpr auto member<in structure::*>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept member = ini::member<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto series
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto series<in[]>
+        {
+            true
+        };
+
+        template <typename in, unsigned long long int count>
+        inline constexpr auto series<in[ count ]>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept series = ini::series<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto function
+        {
+            false
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... )>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) &>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const &>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile &>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile &>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) & noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const & noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile & noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile & noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) &&>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const &&>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile &&>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile &&>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) && noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const && noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) volatile && noexcept>
+        {
+            true
+        };
+
+        template <typename back, typename... args>
+        inline constexpr auto function<back( args... ) const volatile && noexcept>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept function = ini::function<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto method
+        {
+            false
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... )>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) &>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const &>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile &>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile &>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) & noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const & noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile & noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile & noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) &&>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const &&>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile &&>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile &&>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) && noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const && noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) volatile && noexcept>
+        {
+            true
+        };
+
+        template <typename structure, typename back, typename... args>
+        inline constexpr auto method<back ( structure::* )( args... ) const volatile && noexcept>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept method = ini::method<in>;
+}
+
+
+namespace moonmice
+{
+    namespace ini
+    {
+        template <typename in>
+        inline constexpr auto structure
+        {
+            false
+        };
+
+        template <typename in>
+        inline constexpr auto structure<int in::*>
+        {
+            true
+        };
+    }
+
+
+    template <typename in>
+    concept structure = ini::structure<int in::*>;
+}
+
+
+namespace moonmice
+{
+    template <typename in>
+    concept  floating = same
+    <
+        remove::defenses<in>,
+        float,
+        double
+    >;
+
+
+    template <typename in>
+    concept  symbolic = same
+    <
+        remove::defenses<in>,
+        char,
+        wchar_t,
+        char8_t,
+        char16_t,
+        char32_t
+    >;
+
+
+    template <typename in>
+    concept   nothing = same
+    <
+        remove::defenses<in>,
+        void
+    >;
+
+
+    template <typename in>
+    concept   logical = same
+    <
+        remove::defenses<in>,
+        bool
+    >;
+
+
+    template <typename in>
+    concept nullpoint = same
+    <
+        remove::defenses<in>,
+        decltype( nullptr )
+    >;
+
+
+    template <typename in>
+    concept sintegral = same
+    <
+        remove::defenses<in>,
+        signed char,
+        signed short int,
+        signed int,
+        signed long int,
+        signed long long int
+    >;
+
+
+    template <typename in>
+    concept uintegral = same
+    <
+        remove::defenses<in>,
+        unsigned char,
+        unsigned short int,
+        unsigned int,
+        unsigned long int,
+        unsigned long long int
+    >;
+
+
+    template <typename in>
+    concept    integral = requires
+    {
+        requires
+            sintegral<in> or
+            uintegral<in>;
+    };
+
+
+    template <typename in>
+    concept enumeration = requires
+    {
+        requires
+            not reference<in> and
+            not     point<in> and
+            not    member<in> and
+            not  function<in> and
+            not structure<in> and
+            not  floating<in> and
+            not  integral<in> and
+            not  symbolic<in> and
+            not   nothing<in> and
+            not   logical<in> and
+            not nullpoint<in>;
+    };
+}
+
+
 #endif

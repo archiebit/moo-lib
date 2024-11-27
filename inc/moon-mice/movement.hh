@@ -10,7 +10,7 @@
 // Why 'provide'?
 //      Well, for the same name length.
 //
-// Why dows 'provide' have two overrides?
+// Why does 'provide' have two overrides?
 //      To be consistent with 'forward'.
 //
 // Are two overrides for 'provide' bloat?

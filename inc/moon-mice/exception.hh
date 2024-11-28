@@ -4,6 +4,15 @@
 #include <moon-mice\type.hh>
 
 
+namespace moonmice
+{
+    enum : uint32
+    {
+        FAIL_NOT_ENOUGH_MEMORY = 0x8000'0000
+    };
+}
+
+
 namespace moonmice::ini::exception
 {
     extern "C"

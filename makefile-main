@@ -44,7 +44,7 @@ endif
 define add-target-lib
 ${lib}/$1: $(call find-object,$(notdir $1))
 	$$(call make-spot,$$@)
-	ar rc $$(call path,$$@) $$(call path,$$^)
+	ar rc $$(call path,$$@) $$(call path,$$^) ${tflags}
 endef
 
 #  And this macro causes the creation of this target.
@@ -52,25 +52,50 @@ define create-lib
 $(eval $(call add-target-lib,$1))
 endef
 
+#  Appends flags to specific target.
+define append-target-flags
+${bin}/$1:     tflags  += $2
+endef
+
+
+#  Appends flags to all object files of the specific target.
+define append-obj-flags
+${tmp}/$1/%.o: oflags  += $2
+endef
+
+#  The same, but appends include directories.
+define append-inc-dir
+${tmp}/$1/%.o: oflags  += $(addprefix -I ,$(call path,$2))
+endef
+
+#  Appends new search path for static lib.
+define append-lib-dir
+${tmp}/$1:     libdirs += $(addprefix -L ,$(call path,$2))
+endef
+
+#  Links static lib with target.
+define append-lib
+${tmp}/$1:     libs    += $(addprefix -l ,$(call path,$2))
+endef
 
 
 
 #--- Setting variables ---------------------------------------------------------
 incdirs := $(addprefix -I ,${incdirs})
 libdirs := $(addprefix -L ,${libdirs})
-flags   += ${incdirs}
+oflags  += ${incdirs}
 
 #  Position independent code for libraries.
-%.dll: flags += -fPIC
-%.a:   flags += -fPIC
+%.dll: oflags += -fPIC
+%.a:   oflags += -fPIC
 
 #  Adding some flags for different modes.
 #  -- Development mode.
 ifeq '$(word 3,$(subst -, ,${config}))' 'dev'
-flags   += -O0 -ggdb -D DEVELOPMENT
+oflags  += -O0 -ggdb -D DEVELOPMENT
 endif
 
 #  -- Release mode.
 ifeq '$(word 3,$(subst -, ,${config}))' 'rel'
-flags   += -O2
+oflags  += -O2
 endif

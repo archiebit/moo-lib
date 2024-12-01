@@ -10,7 +10,8 @@
 #--- Variables setup -----------------------------------------------------------
 incdirs := inc
 libdirs :=
-flags   := -Wall -Wextra -std=c++23 -masm=intel -m64 -c
+oflags  := -Wall -Wextra -std=c++23 -masm=intel -m64 -c
+tflags  :=
 
 tmp     := out/${config}/tmp
 out     := out/${config}/out
@@ -25,10 +26,12 @@ include makefile-main
 
 #--- Configuration build list --------------------------------------------------
 ifeq '${config}' 'win-x64-dev'
+$(call append-obj-flags,libmoon-mice.a,-fno-exceptions -fno-rtti -nostdlib)
 $(call create-lib,libmoon-mice.a)
 endif
 
 ifeq '${config}' 'win-x64-rel'
+$(call append-obj-flags,libmoon-mice.a,-fno-exceptions -fno-rtti -nostdlib)
 $(call create-lib,libmoon-mice.a)
 endif
 
@@ -38,7 +41,7 @@ endif
 #--- General build rules -------------------------------------------------------
 ${tmp}/%.o: src/%.cc
 	$(call make-spot,$@)
-	clang++ -o $(call path,$@) $(call path,$^) ${flags}
+	clang++ -o $(call path,$@) $(call path,$^) ${oflags}
 
 ${tmp}/%.o: res/%.rc
 	$(call make-spot,$@)

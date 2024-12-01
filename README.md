@@ -28,10 +28,10 @@ Here is a list of some features I want to add.
 
 | Feature                   | Implemented            | Description                                         |
 |:--------------------------|:----------------------:|:----------------------------------------------------|
-| Custom exception handling | <ul><li>[x] </li></ul> | Uses setjmp/longjmp technique                       |
+| Custom exception handling | <ul><li>[ ] </li></ul> | Uses setjmp/longjmp technique                       |
 | Memory management         | <ul><li>[x] </li></ul> |                                                     |
-| Program startup           | <ul><li>[ ] </li></ul> | Proper initialization of `static` variables         |
-| Thread local storage      | <ul><li>[ ] </li></ul> | Proper initialization of `thread_local` variables   |
+| Program startup           | <ul><li>[x] </li></ul> | Proper initialization of `static` variables         |
+| Thread local storage      | <ul><li>[x] </li></ul> | Proper initialization of `thread_local` variables   |
 | Sequential containers     | <ul><li>[ ] </li></ul> | Something like array, linked list, stack, et cetera |
 
 The list will grow.
